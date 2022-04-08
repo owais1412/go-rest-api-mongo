@@ -28,7 +28,17 @@ func init() {
 	validate = validator.New()
 }
 
-// GetAlbums responds with the list of all albums as JSON.
+// GetAlbumByID godoc
+// @Summary      Get all albums
+// @Description  get albums
+// @Tags         albums
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}  	models.Album
+// @Failure      400  {object}  models.ErrorMessage
+// @Failure      404  {object}  models.ErrorMessage
+// @Failure      500  {object}  models.ErrorMessage
+// @Router       /albums [get]
 func GetAlbums(c *gin.Context) {
 	cursor, err := albumsCollection.Find(c, bson.M{})
 
@@ -45,8 +55,18 @@ func GetAlbums(c *gin.Context) {
 	c.JSON(http.StatusOK, albums)
 }
 
-// GetAlbumByID locates the album whose ID value matches the id
-// parameter sent by the client, then returns that album as a response.
+// GetAlbumByID godoc
+// @Summary      Get an album
+// @Description  get string by ID
+// @Tags         albums
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Album ID"
+// @Success      200  {object}  models.Album
+// @Failure      400  {object}  models.ErrorMessage
+// @Failure      404  {object}  models.ErrorMessage
+// @Failure      500  {object}  models.ErrorMessage
+// @Router       /albums/{id} [get]
 func GetAlbumByID(c *gin.Context) {
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 
@@ -62,7 +82,19 @@ func GetAlbumByID(c *gin.Context) {
 	c.JSON(http.StatusOK, album)
 }
 
-// PostAlbums adds an album from JSON received in the request body.
+// PostAlbum godoc
+// @Summary      Add an album
+// @Description  add album by json
+// @Tags         albums
+// @Accept       json
+// @Produce      json
+// @Param        album   body      models.AddAlbum  true  "Add Album"
+// @Success      200	{object}  models.Album
+// @Failure      400	{object}  models.ErrorMessage
+// @Failure      404	{object}  models.ErrorMessage
+// @Failure      500	{object}  models.ErrorMessage
+// @Security     bearer
+// @Router       /albums [post]
 func PostAlbum(c *gin.Context) {
 	//this is used to determine how long the API call should last
 	var ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
@@ -111,6 +143,19 @@ func PostAlbum(c *gin.Context) {
 	c.JSON(http.StatusOK, result)
 }
 
+// UpdateAlbum godoc
+// @Summary      Update an album
+// @Description  Update by json album
+// @Tags         albums
+// @Accept       json
+// @Produce      json
+// @Param        id       path      string	true  "Account ID"
+// @Param        album	body      models.AddAlbum  true  "Update Album"
+// @Success      200      {object}  models.SuccessMessage
+// @Failure      400      {object}  models.ErrorMessage
+// @Failure      404      {object}  models.ErrorMessage
+// @Failure      500      {object}  models.ErrorMessage
+// @Router       /albums/{id} [patch]
 func UpdateAlbum(c *gin.Context) {
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 
@@ -146,8 +191,18 @@ func UpdateAlbum(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "successfully updated the album"})
 }
 
-// DeleteAlbumByID locates the album whose ID value matches the id
-// parameter sent by the client, then deletes the album from DB
+// DeleteAlbumByID godoc
+// @Summary      Delete an albums
+// @Description  Delete by album ID
+// @Tags         albums
+// @Accept       json
+// @Produce      json
+// @Param        id   path      string  true  "Album ID"
+// @Success      200      {object}  models.SuccessMessage
+// @Failure      400      {object}  models.ErrorMessage
+// @Failure      404      {object}  models.ErrorMessage
+// @Failure      500      {object}  models.ErrorMessage
+// @Router       /albums/{id} [delete]
 func DeleteAlbumByID(c *gin.Context) {
 	id, _ := primitive.ObjectIDFromHex(c.Param("id"))
 
