@@ -18,6 +18,8 @@ var router = routes.Routes()
 
 var id string
 
+var apiprefix = "/api/v1"
+
 type PostResponse struct {
 	InsertedID string
 }
@@ -25,7 +27,7 @@ type PostResponse struct {
 func TestGetAlumbsRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/albums", nil)
+	req, _ := http.NewRequest("GET", apiprefix+"/albums", nil)
 	router.ServeHTTP(w, req)
 
 	assert.Equal(t, http.StatusOK, w.Code)
@@ -40,8 +42,8 @@ func TestPostAlbumRoute(t *testing.T) {
 	}`)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/albums", bytes.NewBuffer(body))
-	req.Header.Add("Authentication", "Bearer owais")
+	req, _ := http.NewRequest("POST", apiprefix+"/albums", bytes.NewBuffer(body))
+	req.Header.Add("Authorization", "Bearer owais")
 
 	router.ServeHTTP(w, req)
 
@@ -55,7 +57,7 @@ func TestPostAlbumRoute(t *testing.T) {
 func TestGetAlbumByIDRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/albums/"+id, nil)
+	req, _ := http.NewRequest("GET", apiprefix+"/albums/"+id, nil)
 	router.ServeHTTP(w, req)
 
 	var album models.Album
@@ -68,7 +70,7 @@ func TestGetAlbumByIDRoute(t *testing.T) {
 func TestGetAlbumByIDRoute_NotFound(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("GET", "/albums/1", nil)
+	req, _ := http.NewRequest("GET", apiprefix+"/albums/1", nil)
 	router.ServeHTTP(w, req)
 
 	expectedResBody, _ := json.Marshal(gin.H{"error": "album not found"})
@@ -87,8 +89,8 @@ func TestPostAlbumRoute_InvalidToken(t *testing.T) {
 	}`)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("POST", "/albums", bytes.NewBuffer(body))
-	req.Header.Add("Authentication", "Bearer wrong_token")
+	req, _ := http.NewRequest("POST", apiprefix+"/albums", bytes.NewBuffer(body))
+	req.Header.Add("Authorization", "Bearer wrong_token")
 
 	router.ServeHTTP(w, req)
 
@@ -103,7 +105,7 @@ func TestPatchAlbumRoute(t *testing.T) {
 	}`)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("PATCH", "/albums/"+id, bytes.NewBuffer(body))
+	req, _ := http.NewRequest("PATCH", apiprefix+"/albums/"+id, bytes.NewBuffer(body))
 
 	router.ServeHTTP(w, req)
 
@@ -122,7 +124,7 @@ func TestPatchAlbumRoute_NotFound(t *testing.T) {
 	}`)
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("PATCH", "/albums/1", bytes.NewBuffer(body))
+	req, _ := http.NewRequest("PATCH", apiprefix+"/albums/1", bytes.NewBuffer(body))
 
 	router.ServeHTTP(w, req)
 
@@ -136,7 +138,7 @@ func TestPatchAlbumRoute_NotFound(t *testing.T) {
 func TestDeleteAlbumRoute(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/albums/"+id, nil)
+	req, _ := http.NewRequest("DELETE", apiprefix+"/albums/"+id, nil)
 
 	router.ServeHTTP(w, req)
 
@@ -150,7 +152,7 @@ func TestDeleteAlbumRoute(t *testing.T) {
 func TestDeleteAlbumRoute_NotFound(t *testing.T) {
 
 	w := httptest.NewRecorder()
-	req, _ := http.NewRequest("DELETE", "/albums/1", nil)
+	req, _ := http.NewRequest("DELETE", apiprefix+"/albums/1", nil)
 
 	router.ServeHTTP(w, req)
 
