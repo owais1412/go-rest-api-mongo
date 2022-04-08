@@ -101,7 +101,7 @@ func PostAlbum(c *gin.Context) {
 
 	var album models.Album
 
-	token := strings.Split(c.Request.Header["Authentication"][0], " ")[1]
+	token := strings.Split(c.Request.Header["Authorization"][0], " ")[1]
 
 	if token != "owais" {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "wrong token"})
