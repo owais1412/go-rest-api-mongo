@@ -109,8 +109,8 @@ func PostAlbum(c *gin.Context) {
 		return
 	}
 
-	// Call BindJSON to bind the received JSON to album.
-	if err := c.BindJSON(&album); err != nil {
+	// Call ShouldBindJSON to bind the received JSON to album.
+	if err := c.ShouldBindJSON(&album); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "invalid data"})
 		cancel()
 		return
@@ -168,8 +168,8 @@ func UpdateAlbum(c *gin.Context) {
 		return
 	}
 
-	// Call BindJSON to bind the received JSON to album.
-	if err = c.BindJSON(&album); err != nil {
+	// Call ShouldBindJSON to bind the received JSON to album.
+	if err = c.ShouldBindJSON(&album); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "invalid data"})
 		return
 	}
