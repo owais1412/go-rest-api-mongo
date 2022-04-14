@@ -91,7 +91,7 @@ func TestPostAlbumRoute(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			w := httptest.NewRecorder()
 			req, _ := http.NewRequest("POST", apiprefix+"/albums", bytes.NewBuffer(tc.body))
-			req.Header.Add("Authorization", "Bearer "+tc.token)
+			req.Header.Add("Authorization", tc.token)
 
 			router.ServeHTTP(w, req)
 
@@ -187,6 +187,16 @@ func TestPatchAlbumRoute(t *testing.T) {
 			}`),
 			response: gin.H{"error": "album not found"},
 			status:   http.StatusNotFound,
+		},
+		{
+			name: "try to update album with invalid body",
+			id:   id,
+			body: []byte(`{
+				"title": "New album",
+				"artist": "Me Owais",
+			}`),
+			response: gin.H{"message": "invalid data"},
+			status:   http.StatusUnprocessableEntity,
 		},
 	}
 
