@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 	"rest/database"
+	"rest/middlewares"
 	"rest/models"
-	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -101,9 +101,9 @@ func PostAlbum(c *gin.Context) {
 
 	var album models.Album
 
-	token := strings.Split(c.Request.Header["Authorization"][0], " ")[1]
+	token := c.GetHeader("Authorization")
 
-	if token != "owais" {
+	if !middlewares.IsValidToken(token) {
 		c.JSON(http.StatusUnprocessableEntity, gin.H{"message": "wrong token"})
 		cancel()
 		return

@@ -19,3 +19,7 @@ func DotEnvVariable(key string) string {
 
 	return os.Getenv(key)
 }
+
+func IsValidToken(token string) bool {
+	return token == "owais"
+}
